@@ -24,7 +24,54 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+app.get("/api/", function (req, res) {
+  res.json(
+    {
+    'unix': Date.now(),
+     'utc': Date()
+    }
+    );
+});
 
+
+
+app.get("/api/", function (req, res) {
+  res.json(
+    {
+      'unix': Date.now(),
+       'utc': Date()
+    }
+      );
+});
+
+app.get("/api/:d", (req, res) => {
+  let dateString = req.params.d;
+
+  if (!isNaN(Date.parse(dateString))) {
+    let dateObject = new Date(dateString);
+    res.json(
+      {
+         unix: dateObject.valueOf(),
+          utc: dateObject.toUTCString() 
+      }
+        );
+  } else if (/\d{5,}/.test(dateString)) {
+      let dateInt = parseInt(dateString);
+      res.json(
+        {
+           unix: dateInt,
+            utc: new Date(dateInt).toUTCString() 
+        }
+          );
+  } else {
+    res.json(
+      {
+         error: "There are a problem" 
+      }
+        );
+  }
+
+});
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
